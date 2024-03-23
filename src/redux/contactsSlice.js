@@ -22,7 +22,7 @@ const slice = createSlice({
       },
     },
 
-    deleteContact: (state, action) => {
+    onDelete: (state, action) => {
       state.items = state.items.filter(
         (contact) => contact.id !== action.payload
       );
@@ -30,6 +30,6 @@ const slice = createSlice({
   },
 });
 
-export const { addContact, deleteContact } = slice.actions;
+export const { addContact, onDelete } = slice.actions;
 export const contactsReducer = slice.reducer;
 export const selectContacts = (state) => state.contacts.items;

@@ -1,10 +1,12 @@
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import { nanoid } from "nanoid";
 import { useId } from "react";
+import { useDispatch } from "react-redux";
+import { addContact } from "../../redux/contactsSlice";
 import * as Yup from "yup";
 import css from "./ContactForm.module.css";
 
-export const ContactForm = ({ onAddContact }) => {
+export const ContactForm = () => {
+  const dispatch = useDispatch();
   const nameId = useId();
   const numberId = useId();
   const fieldsValue = {
@@ -27,21 +29,23 @@ export const ContactForm = ({ onAddContact }) => {
       .required("Required"),
   });
 
+  const handleSubmit = (value, actions) => {
+    const contactInfo = {
+      name: value.name,
+      number: value.number,
+    };
+    dispatch(addContact(contactInfo));
+    actions.resetForm();
+  };
+
 
   return (
     <Formik
       initialValues={fieldsValue}
       validationSchema={SignupSchema}
-      onSubmit={(values, actions) => {
-        onAddContact({
-          id: nanoid(),
-          name: values.name,
-          number: values.number,
-        });
-        actions.resetForm();
-      }}
+      onSubmit={handleSubmit}
     >
-      <Form className={css.searchForm} >
+      <Form className={css.searchForm}>
         <div className={css.input}>
           <label htmlFor={nameId}>Name</label>
           <Field type="text" name="name" id={nameId} />
